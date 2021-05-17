@@ -3,28 +3,28 @@ class BookRepository {
         this.connectionPool = connectionPool;
     }
 
-    save(book) {
-        this.connectionPool.getPool().query('insert into books set ?', book, (err, result) => {
-            if (err) throw err;
-
-            console.log(result);
-        });
+    get pool() {
+        return this.connectionPool.getPool();
     }
 
-    get(id) {
-
+    save(book, callback) {
+        this.pool.query('insert into books set ?', book, callback);
     }
 
-    getAll() {
-
+    get(id, callback) {
+        this.pool.query('select * from books where id = ?', id, callback);
     }
 
-    update(id, book) {
-
+    getAll(callback) {
+        this.pool.query('select * from books', callback);
     }
 
-    delete() {
+    update(id, book, callback) {
+        this.pool.query('update books set ? where id = ?', [book, id], callback);
+    }
 
+    delete(id, callback) {
+        this.pool.query('delete from books where id = ?', id, callback);
     }
 }
 

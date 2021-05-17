@@ -7,33 +7,65 @@ const BookRepository = require('../database/book-repository');
 
 let repository = new BookRepository(connectionPool);
 
-router.get('/:id', function(req, res) {
-  console.log('ID', req.params.id);
-  res.sendStatus(200);
+// Get a single book
+router.get('/:id', function (req, res) {
+  repository.get(req.params.id, (err, result) => {
+    if (err) {
+      res.status(500).json({ 'error': err.toString() });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  });
 })
 
-router.put('/:id', function(req, res) {
-  console.log('body', req.body);
-  res.sendStatus(200);
+// Update a book
+router.put('/:id', function (req, res) {
+  repository.update(req.params.id, req.body, (err, result) => {
+    if (err) {
+      res.status(500).json({ 'error': err.toString() });
+    }
+    else {
+      res.sendStatus(200);
+    }
+  });
 })
 
-router.delete('/:id', function(req, res) {
-  console.log('ID', req.params.id);
-  res.sendStatus(200);
+// Delete a book
+router.delete('/:id', function (req, res) {
+  repository.delete(req.params.id, (err, result) => {
+    if (err) {
+      res.status(500).json({ 'error': err.toString() });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  });
 })
 
-// save book
-router.post('/', function(req, res) {
-  console.log('post body', req.body);
+// Save a book
+router.post('/', function (req, res) {
 
-  repository.save(req.body);
-  res.sendStatus(200);
-
+  repository.save(req.body, (err, result) => {
+    if (err) {
+      res.status(500).json({ 'error': err.toString() });
+    }
+    else {
+      res.sendStatus(200);
+    }
+  });
 })
 
-/* GET users listing. */
-router.get('/', function(req, res) {
- res.send('books here!');
+// Get All books
+router.get('/', function (req, res) {
+  repository.getAll((err, result) => {
+    if (err) {
+      res.status(500).json({ 'error': err.toString() });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 module.exports = router;

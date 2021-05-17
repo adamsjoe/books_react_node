@@ -4,12 +4,12 @@ const axios = require('axios');
 const { response } = require('./server/app');
 
 const book = {
-    'author':'Oliver Sacks',
-    'title':'The man man who mistook his wife for a hat',
-    'published':'1985-01-01'
+    'author':'Jimmy Changa',
+    'title':'Blah de blah',
+    'published':'2000-01-01'
   };
 
-axios.post('http://localhost:3000/books', book)
+axios.delete('http://localhost:3000/books/6')
 .then(response=>{
     console.log(response)
 })
