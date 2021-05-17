@@ -3,6 +3,9 @@ const mysql = require('mysql');
 
 const router = express.Router();
 const connectionPool = require('../database/connection-pool');
+const BookRepository = require('../database/book-repository');
+
+let repository = new BookRepository(connectionPool);
 
 router.get('/:id', function(req, res) {
   console.log('ID', req.params.id);
@@ -19,16 +22,13 @@ router.delete('/:id', function(req, res) {
   res.sendStatus(200);
 })
 
+// save book
 router.post('/', function(req, res) {
   console.log('post body', req.body);
 
-  connectionPool.getPool().query('insert into books set ?', req.body, (err, result) => {
-    if(err) throw err;
+  repository.save(req.body);
+  res.sendStatus(200);
 
-    console.log(result);
-  });
-
-  res.send('books here!');  
 })
 
 /* GET users listing. */
