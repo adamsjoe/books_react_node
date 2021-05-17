@@ -4,14 +4,13 @@ const mysql = require('mysql');
 const router = express.Router();
 const connectionPool = require('../database/connection-pool');
 
-// const db = require('../config/db');
 
-//console.log(db.user, db.password);
+router.post('/', function(req, res) {
+  console.log('post body', req.body);
+})
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-
-  
+router.get('/', function(req, res) {
 
   // create a book object
   const book = {
