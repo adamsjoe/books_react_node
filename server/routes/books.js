@@ -4,6 +4,20 @@ const mysql = require('mysql');
 const router = express.Router();
 const connectionPool = require('../database/connection-pool');
 
+router.get('/:id', function(req, res) {
+  console.log('ID', req.params.id);
+  res.sendStatus(200);
+})
+
+router.put('/:id', function(req, res) {
+  console.log('body', req.body);
+  res.sendStatus(200);
+})
+
+router.delete('/:id', function(req, res) {
+  console.log('ID', req.params.id);
+  res.sendStatus(200);
+})
 
 router.post('/', function(req, res) {
   console.log('post body', req.body);
