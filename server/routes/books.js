@@ -4,7 +4,7 @@ const router = express.Router();
 
 const db = require('../config/db');
 
-console.log(db.user, db.password);
+//console.log(db.user, db.password);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
