@@ -1,5 +1,7 @@
 import React from 'react';
 import './Book.css';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class Book extends React.Component {
 
@@ -13,6 +15,29 @@ class Book extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleSubmit(event) {
+        let {author, title, published} = this.state;
+
+        published += '-01-01;'
+
+        const book = {
+            author: author,
+            title: title,
+            published: published
+        }
+
+        axios.post(process.env.REACT_APP_SERVER_URL, book)
+            .then(result => {
+                this.setState({ created: true });
+            })
+            .catch(error=>{
+                console.log(error)
+            });
+
+        event.preventDefault();
     }
 
     handleChange(event) {
@@ -22,14 +47,17 @@ class Book extends React.Component {
         this.setState({
             [name]:value
         });
-    }
+    } 
 
     render() {
-        
-        console.log(this.state);
+
+        if (this.state.created) {
+            return <Redirect to='/' />;
+        }
+
         return (            
             <div>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     <label htmlFor="author">Author</label>
                     <input value={this.state.author} onChange={this.handleChange} type="text" name="author" id="author" />
 
