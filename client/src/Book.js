@@ -8,17 +8,17 @@ class Book extends React.Component {
     validation = {
         author: {
             rule: /^\S.{0,48}\S$/,
-            message: 'Author field must have 2-50 characters'
+            message: '"Author" field must have 2-50 characters'
         },
 
         title: {
             rule: /^\S.{0,68}\S$/,
-            message: 'Title field must have 2-70 characters'
+            message: '"Title" field must have 2-70 characters'
         },
 
         published: {
             rule: /^\d{4}$/,
-            message: 'Published field must be a 4 digit year'
+            message: '"Published" field must be a 4 digit year'
         }
     }
     constructor(props) {
@@ -35,19 +35,34 @@ class Book extends React.Component {
     }
 
     validate() {
+
         for (let field in this.validation) {
             const rule = this.validation[field].rule;
             const message = this.validation[field].message;
             const value = this.state[field];
             
             if (!value.match(rule)) {
-                console.log(field, rule, message, value);
+                this.showMessage(message);
+                return false;
             }
         }
-    };
+        return true
+    }
+
+    showMessage(message) {
+        this.setState({ message: message });
+
+        setTimeout(() => {
+            this.setState({ message: '' });
+        }, 3000)
+    }
 
     handleSubmit(event) {
-        this.validate();
+        event.preventDefault();
+
+        if (!this.validate()) {
+            return;
+        }
 
         let {author, title, published} = this.state;
 
@@ -67,7 +82,6 @@ class Book extends React.Component {
                 console.log(error)
             });
 
-        event.preventDefault();
     }
 
     handleChange(event) {
@@ -98,8 +112,9 @@ class Book extends React.Component {
                     <input value={this.state.published} onChange={this.handleChange} type="text" name="published" id="published" />
 
                     <input type="submit" value="save" />
-
+                    <div className="message">{this.state.message}</div>
                 </form>
+
             </div>
         );
     }
