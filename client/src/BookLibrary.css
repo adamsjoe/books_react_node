@@ -5,6 +5,10 @@ table {
     margin-right: auto;
 }
 
+td {
+    word-wrap: break-word;
+    max-width: 300px;
+}
 th {
     text-align: left;
 }
