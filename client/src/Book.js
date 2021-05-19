@@ -28,7 +28,8 @@ class Book extends React.Component {
         this.state = {
             author: '',
             title: '',
-            published: ''
+            published: '',
+            submitAttemnpts: 0
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -43,19 +44,11 @@ class Book extends React.Component {
             const value = this.state[field];
             
             if (!value.match(rule)) {
-                this.showMessage({ message: message});
+                this.setState({ message: message, submitAttemnpts: this.state.submitAttemnpts +1 });
                 return false;
             }
         }
         return true
-    }
-
-    showMessage(message) {
-        // this.setState({ message: message });
-
-        // setTimeout(() => {
-        //     this.setState({ message: '' });
-        // }, 3000)
     }
 
     handleSubmit(event) {
@@ -113,7 +106,7 @@ class Book extends React.Component {
                     <input value={this.state.published} onChange={this.handleChange} type="text" name="published" id="published" />
 
                     <input type="submit" value="save" />
-                    <FlashMessage message={this.state.message} duration='3000' />
+                    <FlashMessage key={this.state.submitAttemnpts} message={this.state.message} duration='3000' />
                 </form>
 
             </div>
