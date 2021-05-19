@@ -1,7 +1,7 @@
 import React from 'react';
 import './Book.css';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import FlashMessage from './FlashMessage';
 
 class Book extends React.Component {
@@ -22,10 +22,12 @@ class Book extends React.Component {
             message: '"Published" field must be a 4 digit year'
         }
     }
+
     constructor(props) {
         super(props);
 
         this.state = {
+            id: props.match.params.id,
             author: '',
             title: '',
             published: '',
@@ -34,6 +36,25 @@ class Book extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    componentDidMount() {
+        if(!this.state.id) {
+            return;
+        }
+
+        axios.get(process.env.REACT_APP_SERVER_URL + '/' + this.state.id)
+            .then(result=> {
+                let {author, title, published} = result.data[0];
+                this.setState({
+                    author: author,
+                    title: title,
+                    published: published.substr(0, 4)
+                })
+            })
+            .catch(error=> {
+                console.log(error);
+            })
     }
 
     validate() {
@@ -58,24 +79,32 @@ class Book extends React.Component {
             return;
         }
 
-        let {author, title, published} = this.state;
+        let {id, author, title, published} = this.state;
 
         published += '-01-01;'
 
         const book = {
+            id: id,
             author: author,
             title: title,
             published: published
         }
 
-        axios.post(process.env.REACT_APP_SERVER_URL, book)
+        let updateFunc = axios.post;
+        let url = process.env.REACT_APP_SERVER_URL;
+
+        if(id) {
+            updateFunc = axios.put;
+            url += '/' + id;
+        }
+
+        updateFunc(url, book)
             .then(result => {
                 this.setState({ created: true });
             })
             .catch(error=>{
                 console.log(error)
             });
-
     }
 
     handleChange(event) {
@@ -114,4 +143,4 @@ class Book extends React.Component {
     }
 }
 
-export default Book;
+export default withRouter(Book);

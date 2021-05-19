@@ -16,7 +16,10 @@ function App() {
           </Route>
           <Route path="/create">
             <Book />
-          </Route>          
+          </Route> 
+          <Route path="/edit/:id">
+            <Book />
+          </Route>                    
         </Switch>
       </div>
     </Router>
