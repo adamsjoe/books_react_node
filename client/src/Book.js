@@ -2,6 +2,7 @@ import React from 'react';
 import './Book.css';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import FlashMessage from './FlashMessage';
 
 class Book extends React.Component {
 
@@ -42,7 +43,7 @@ class Book extends React.Component {
             const value = this.state[field];
             
             if (!value.match(rule)) {
-                this.showMessage(message);
+                this.showMessage({ message: message});
                 return false;
             }
         }
@@ -50,11 +51,11 @@ class Book extends React.Component {
     }
 
     showMessage(message) {
-        this.setState({ message: message });
+        // this.setState({ message: message });
 
-        setTimeout(() => {
-            this.setState({ message: '' });
-        }, 3000)
+        // setTimeout(() => {
+        //     this.setState({ message: '' });
+        // }, 3000)
     }
 
     handleSubmit(event) {
@@ -112,7 +113,7 @@ class Book extends React.Component {
                     <input value={this.state.published} onChange={this.handleChange} type="text" name="published" id="published" />
 
                     <input type="submit" value="save" />
-                    <div className="message">{this.state.message}</div>
+                    <FlashMessage message={this.state.message} duration='3000' />
                 </form>
 
             </div>
