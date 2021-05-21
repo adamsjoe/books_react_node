@@ -12,19 +12,19 @@ var app = express();
 
 app.use(cors());
 
-// slows things by 5 seconds
-app.use(function(req, res, next) {
-    setTimeout(next, 1000);
-});
+// // slows things by 5 seconds
+// app.use(function(req, res, next) {
+//     setTimeout(next, 1000);
+// });
 
-// throw a 500 when trying to delete
-app.use(function(req, res, next) {
-    if (req.method == 'DELETE') {
-        res.sendStatus(500);
-    } else {
-        next();
-    }
-});
+// // throw a 500 when trying to delete
+// app.use(function(req, res, next) {
+//     if (req.url.match(/\d+/)) {
+//         res.sendStatus(500);
+//     } else {
+//         next();
+//     }
+// });
 
 app.use(logger('dev'));
 app.use(express.json());
