@@ -14,7 +14,16 @@ app.use(cors());
 
 // slows things by 5 seconds
 app.use(function(req, res, next) {
-setTimeout(next, 5000);
+    setTimeout(next, 1000);
+});
+
+// throw a 500 when trying to delete
+app.use(function(req, res, next) {
+    if (req.method == 'DELETE') {
+        res.sendStatus(500);
+    } else {
+        next();
+    }
 });
 
 app.use(logger('dev'));
