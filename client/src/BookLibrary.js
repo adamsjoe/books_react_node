@@ -10,6 +10,7 @@ class BookLibrary extends React.Component {
 
         this.state = {
             books: [],
+            loading: false,
         };
 
         this.handleDelete = this.handleDelete.bind(this);
@@ -20,9 +21,14 @@ class BookLibrary extends React.Component {
     }
 
     refresh() {
+        this.setState({loading: true});
+
         axios(process.env.REACT_APP_SERVER_URL)
-            .then(result => this.setState({ books: result.data }))
-            .catch(error => console.log(error));
+            .then(result => this.setState({ loading: false, books: result.data }))
+            .catch(error => {
+                this.setState({ loading: false }); 
+                console.log(error)
+            });
     }
 
     handleDelete(id) {
@@ -36,7 +42,15 @@ class BookLibrary extends React.Component {
     }
 
     render() {
-        return <BookTable books={this.state.books} handleDelete={this.handleDelete} />
+        let content = '';
+
+        if(this.state.loading) {
+            content = <div className='loading'>Loading...</div>
+        } else {
+            content = <BookTable books={this.state.books} handleDelete={this.handleDelete} />  
+        }
+        
+        return content;
     }
 }
 
